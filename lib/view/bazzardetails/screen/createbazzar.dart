@@ -239,7 +239,6 @@ class CreateBazzar extends StatelessWidget {
                                 controller.addCategory(text);
                                 controller.catController.clear();
                               } else {
-                                // إذا فيه فئة، أظهر رسالة للمستخدم
                                 ScaffoldMessenger.of(Get.context!).showSnackBar(
                                   SnackBar(
                                     content: Text(

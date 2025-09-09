@@ -1,7 +1,6 @@
 import 'package:bazaar2/core/const_data/app_image.dart';
 import 'package:bazaar2/core/service/media_query.dart';
 import 'package:bazaar2/view/home/controller/home_controller.dart';
-import 'package:bazaar2/view/home/widgets/CustomDrawer.dart';
 import 'package:bazaar2/view/product/controller/product_controller.dart';
 import 'package:bazaar2/view/product/screen/viewproduct.dart';
 import 'package:flutter/material.dart';
@@ -25,10 +24,7 @@ class AddProductPage extends StatelessWidget {
       appBar: DefaultAppBar(
         onMenuTap: controllerH.toggleDrawer,
       ),
-      drawer: CustomDrawer(
-        width: MediaQueryUtil.screenWidth * 0.75, // أو أي عرض تحبيه
-        onClose: () => controllerH.closeDrawer, // لإغلاق الـ Drawer
-      ),
+
       backgroundColor: AppColors.backgroundColor,
       body: Padding(
         padding: EdgeInsets.only(

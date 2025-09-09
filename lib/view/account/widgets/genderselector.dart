@@ -25,19 +25,17 @@ class GenderSelector extends StatelessWidget {
           height: MediaQueryUtil.screenHeight / 15.345,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color:
-                controller.selectedGender.value == gender
-                    ? AppColors.primaryOrangeColor
-                    : AppColors.lightGrey,
+            color: controller.selectedGender.value == gender
+                ? AppColors.primaryOrangeColor
+                : AppColors.lightGrey,
           ),
           child: Center(
             child: Image.asset(
               imagename,
               width: MediaQueryUtil.screenWidth / 16.48,
-              color:
-                  controller.selectedGender.value == gender
-                      ? AppColors.white
-                      : AppColors.darkGrey,
+              color: controller.selectedGender.value == gender
+                  ? AppColors.white
+                  : AppColors.darkGrey,
             ),
           ),
         ),

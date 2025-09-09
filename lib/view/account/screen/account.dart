@@ -51,8 +51,8 @@ class Account extends StatelessWidget {
                                   backgroundImage:
                                       controller.profileImage.value != null
                                           ? FileImage(
-                                            controller.profileImage.value!,
-                                          )
+                                              controller.profileImage.value!,
+                                            )
                                           : AssetImage(AppImages.profilephoto)
                                               as ImageProvider,
                                 ),

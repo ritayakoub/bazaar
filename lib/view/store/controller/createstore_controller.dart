@@ -8,10 +8,11 @@ import 'package:image_picker/image_picker.dart';
 class CreatestoreController extends GetxController {
   var hasStore = false.obs;
   var isLoading = true.obs;
+  var categories = <String>[].obs;
   Future<void> checkStore() async {
     isLoading.value = true;
     await Future.delayed(const Duration(seconds: 1));
-    hasStore.value = false; // أو true حسب منطقك أو من API
+    hasStore.value = false;
     isLoading.value = false;
   }
 
@@ -21,15 +22,19 @@ class CreatestoreController extends GetxController {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController brandTypeController = TextEditingController();
   String? storeLocation;
-
+  final TextEditingController catController = TextEditingController();
   Rx<File?> selectedImage = Rx<File?>(null);
   final ImagePicker _picker = ImagePicker();
   final RxList<Categories> categoryList = <Categories>[].obs;
   final repository = CategoriesRepository();
+  void addCategory(String cat) {
+    if (!categories.contains(cat)) {
+      categories.add(cat);
+    }
+  }
 
-  void loadCategories() async {
-    final categories = await repository.fetchCategories();
-    categoryList.assignAll(categories);
+  void removeCategory(String cat) {
+    categories.remove(cat);
   }
 
   // ✅ اختيار صورة من المعرض وتخزينها
@@ -50,8 +55,7 @@ class CreatestoreController extends GetxController {
   @override
   void onInit() {
     checkStore();
-    loadCategories();
-    // يتفعل تلقائياً عند بداية الصفحة
+
     super.onInit();
   }
 

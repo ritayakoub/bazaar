@@ -1,5 +1,6 @@
 import 'package:bazaar2/core/const_data/app_image.dart';
 import 'package:bazaar2/view/home/controller/home_controller.dart';
+import 'package:bazaar2/view/home/widgets/CustomDrawer.dart';
 import 'package:bazaar2/view/store/widgets/Storecreated.dart';
 import 'package:bazaar2/widget/defaultappbar.dart';
 import 'package:flutter/material.dart';
@@ -19,8 +20,10 @@ class StoreDetails extends StatelessWidget {
     final controllerH = Get.put(HomeController());
 
     return Scaffold(
-      appBar: DefaultAppBar(onMenuTap: controllerH.toggleDrawer),
       backgroundColor: AppColors.backgroundColor,
+      appBar: DefaultAppBar(
+        onMenuTap: controllerH.toggleDrawer,
+      ),
       body: Padding(
           padding: EdgeInsets.only(
             top: MediaQueryUtil.screenHeight / 52.75,
@@ -157,6 +160,93 @@ class StoreDetails extends StatelessWidget {
                             borderSide: const BorderSide(
                                 color: AppColors.borderLightGrey)),
                       )),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: MediaQueryUtil.screenHeight / 42,
+                        bottom: MediaQueryUtil.screenHeight / 100),
+                    child: Text(
+                      "Category",
+                      style: TextStyle(
+                          fontSize: MediaQueryUtil.screenWidth / 22,
+                          color: AppColors.darkGrey,
+                          fontFamily: FontFamily.montserrat),
+                    ),
+                  ),
+                  Obx(() => Wrap(
+                        spacing: MediaQueryUtil.screenWidth / 51,
+                        children: controller.categories
+                            .map((cat) => Chip(
+                                  label: Text(cat),
+                                  backgroundColor:
+                                      AppColors.settingsLightOrange,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        MediaQueryUtil.screenWidth / 40),
+                                  ),
+                                  deleteIcon: Icon(
+                                    Icons.close,
+                                    size: MediaQueryUtil.screenWidth / 22,
+                                  ),
+                                  deleteIconColor: AppColors.primaryOrangeColor,
+                                  onDeleted: () =>
+                                      controller.removeCategory(cat),
+                                ))
+                            .toList(),
+                      )),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                            controller: controller.catController,
+                            decoration: InputDecoration(
+                              hintText: "food x , fast food x",
+                              hintStyle: const TextStyle(
+                                color: AppColors.borderLightGrey,
+                                fontFamily: FontFamily.montserrat,
+                              ),
+                              fillColor: AppColors.white,
+                              filled: true,
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    MediaQueryUtil.screenWidth / 51.5),
+                                borderSide: const BorderSide(
+                                    color: AppColors.borderLightGrey),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      MediaQueryUtil.screenWidth / 51.5),
+                                  borderSide: const BorderSide(
+                                      color: AppColors.borderLightGrey)),
+                            )),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.add),
+                        onPressed: () {
+                          final text = controller.catController.text.trim();
+
+                          if (text.isEmpty) return;
+
+                          if (controller.categories.isEmpty) {
+                            controller.addCategory(text);
+                            controller.catController.clear();
+                          } else {
+                            ScaffoldMessenger.of(Get.context!).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  "You can't add more than one category",
+                                  style: TextStyle(
+                                      fontFamily: FontFamily.montserrat,
+                                      fontSize:
+                                          MediaQueryUtil.screenWidth / 24),
+                                ),
+                                duration: const Duration(seconds: 3),
+                              ),
+                            );
+                          }
+                        },
+                      )
+                    ],
+                  ),
                   Padding(
                     padding: EdgeInsets.only(
                         top: MediaQueryUtil.screenHeight / 42,

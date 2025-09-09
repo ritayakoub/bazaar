@@ -2,6 +2,7 @@ import 'package:bazaar2/core/const_data/app_colors.dart';
 import 'package:bazaar2/core/const_data/app_image.dart';
 import 'package:bazaar2/core/const_data/font_family.dart';
 import 'package:bazaar2/core/service/media_query.dart';
+import 'package:bazaar2/view/home/widgets/CustomDrawer.dart';
 import 'package:bazaar2/view/store/controller/createstore_controller.dart';
 import 'package:bazaar2/view/store/widgets/store_details.dart';
 import 'package:bazaar2/view/home/controller/home_controller.dart';
@@ -20,10 +21,14 @@ class Createstore extends StatelessWidget {
 
     return Stack(children: [
       Scaffold(
+          backgroundColor: AppColors.backgroundColor,
           appBar: DefaultAppBar(
             onMenuTap: controllerH.toggleDrawer,
           ),
-          backgroundColor: AppColors.backgroundColor,
+          drawer: CustomDrawer(
+            width: MediaQueryUtil.screenWidth * 0.75,
+            onClose: () => controllerH.closeDrawer,
+          ),
           body: Stack(children: [
             Positioned(
               top: 30,

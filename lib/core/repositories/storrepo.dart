@@ -17,10 +17,9 @@
 // final Store;
 //Store.reviews.add(newReview);
 import 'package:bazaar2/core/const_data/list.dart';
-import 'package:bazaar2/view/home/model/stor.dart';
 
 class CategoriesRepository {
-  Future<List<Categories>> fetchCategories() async {
+  Future<List> fetchCategories() async {
     await Future.delayed(Duration(seconds: 1));
     return category;
   }

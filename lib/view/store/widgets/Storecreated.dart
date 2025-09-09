@@ -102,8 +102,7 @@ class Storecreated extends StatelessWidget {
           ),
           SizedBox(height: MediaQueryUtil.screenHeight / 80),
           SizedBox(
-            height: MediaQueryUtil.screenHeight /
-                18, // ضروري تحدد ارتفاع للـ ListView الأفقي
+            height: MediaQueryUtil.screenHeight / 18,
             child: Obx(() {
               return ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -153,8 +152,7 @@ class Storecreated extends StatelessWidget {
                           Colors.black.withOpacity(0.3), // تغبيش بسيط بالخلفية
                       builder: (BuildContext context) {
                         return BackdropFilter(
-                            filter: ImageFilter.blur(
-                                sigmaX: 5, sigmaY: 5), // قوة التغبيش
+                            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                             child: AlertDialog(
                               backgroundColor: AppColors.white,
                               shape: RoundedRectangleBorder(
@@ -199,27 +197,7 @@ class Storecreated extends StatelessWidget {
                               ],
                             ));
                       });
-                  // Get.defaultDialog(
-                  //   title: "Confirm Delete",
-                  //   middleText: "Are you sure you want to delete the store?",
-                  //   textCancel: "No",
-                  //   textConfirm: "Yes",
-                  //   confirmTextColor: AppColors.white,
-                  //   onConfirm: () {
-                  //     // مسح بيانات المتجر
-                  //     controller.selectedImage.value = null;
-                  //     controller.nameController.clear();
-                  //     controller.brandTypeController.clear();
-                  //     controller.locationController.clear();
-                  //     controller.hasStore.value = false;
-
-                  //     Get.back(); // غلق الـ dialog
-                  //     Get.off(() => HomeScreen()); // العودة للصفحة الرئيسية
-                  //   },
-                  //   onCancel: () {
-                  //     // فقط يغلق الـ dialog تلقائياً
-                  //   },
-                  // );
+                  controller.hasStore.value = false;
                 },
                 color: AppColors.red,
                 shape: RoundedRectangleBorder(

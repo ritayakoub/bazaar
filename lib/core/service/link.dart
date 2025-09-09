@@ -7,6 +7,8 @@ class AppLink {
   static String signin = "$appRoot/login";
   static String signup = "$appRoot/register";
   static String logout = "$appRoot/logout";
+  static String me = "$appRoot/me";
+  //static String profileImage = "$appRoot/profileImage";
   Map<String, String> getHeader() {
     Map<String, String> mainHeader = {
       'Content-Type': 'application/json',

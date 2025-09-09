@@ -170,99 +170,99 @@ class AccountController extends GetxController {
           children: [
             hasImage
                 ? Column(
-                  children: [
-                    ListTile(
-                      leading: const Icon(
-                        Icons.visibility,
-                        color: AppColors.primaryOrangeColor,
-                      ),
-                      title: const Text("See profile picture"),
-                      onTap: () {
-                        Get.back();
-                        Future.delayed(const Duration(milliseconds: 200), () {
-                          showDialog(
-                            context: Get.context!,
-                            builder: (context) {
-                              return Dialog(
-                                backgroundColor: Colors.transparent,
-                                child: InteractiveViewer(
-                                  child: AspectRatio(
-                                    aspectRatio: 1,
-                                    child: Image.file(
-                                      profileImage.value!,
-                                      fit: BoxFit.contain,
+                    children: [
+                      ListTile(
+                        leading: const Icon(
+                          Icons.visibility,
+                          color: AppColors.primaryOrangeColor,
+                        ),
+                        title: const Text("See profile picture"),
+                        onTap: () {
+                          Get.back();
+                          Future.delayed(const Duration(milliseconds: 200), () {
+                            showDialog(
+                              context: Get.context!,
+                              builder: (context) {
+                                return Dialog(
+                                  backgroundColor: Colors.transparent,
+                                  child: InteractiveViewer(
+                                    child: AspectRatio(
+                                      aspectRatio: 1,
+                                      child: Image.file(
+                                        profileImage.value!,
+                                        fit: BoxFit.contain,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              );
-                            },
-                          );
-                        });
-                      },
-                    ),
-                    ListTile(
-                      leading: const Icon(
-                        Icons.image,
-                        color: AppColors.primaryOrangeColor,
+                                );
+                              },
+                            );
+                          });
+                        },
                       ),
-                      title: const Text("Choose profile picture"),
-                      onTap: () {
-                        Get.back();
-                        Future.delayed(const Duration(milliseconds: 200), () {
-                          showPictureSourceBottomSheet();
-                        });
-                      },
-                    ),
-                    ListTile(
-                      leading: const Icon(
-                        Icons.delete,
-                        color: AppColors.primaryOrangeColor,
+                      ListTile(
+                        leading: const Icon(
+                          Icons.image,
+                          color: AppColors.primaryOrangeColor,
+                        ),
+                        title: const Text("Choose profile picture"),
+                        onTap: () {
+                          Get.back();
+                          Future.delayed(const Duration(milliseconds: 200), () {
+                            showPictureSourceBottomSheet();
+                          });
+                        },
                       ),
-                      title: const Text("Remove picture"),
-                      onTap: () {
-                        Get.back();
-                        Future.delayed(const Duration(milliseconds: 200), () {
-                          removeProfileImage();
-                        });
-                      },
-                    ),
-                  ],
-                )
+                      ListTile(
+                        leading: const Icon(
+                          Icons.delete,
+                          color: AppColors.primaryOrangeColor,
+                        ),
+                        title: const Text("Remove picture"),
+                        onTap: () {
+                          Get.back();
+                          Future.delayed(const Duration(milliseconds: 200), () {
+                            removeProfileImage();
+                          });
+                        },
+                      ),
+                    ],
+                  )
                 : Column(
-                  children: [
-                    Text(
-                      "Choose picture source",
-                      style: TextStyle(
-                        fontSize: MediaQueryUtil.screenWidth / 22.88,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.primaryFontColor,
+                    children: [
+                      Text(
+                        "Choose picture source",
+                        style: TextStyle(
+                          fontSize: MediaQueryUtil.screenWidth / 22.88,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.primaryFontColor,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: MediaQueryUtil.screenHeight / 84.4),
-                    ListTile(
-                      leading: const Icon(
-                        Icons.camera_alt,
-                        color: AppColors.primaryOrangeColor,
+                      SizedBox(height: MediaQueryUtil.screenHeight / 84.4),
+                      ListTile(
+                        leading: const Icon(
+                          Icons.camera_alt,
+                          color: AppColors.primaryOrangeColor,
+                        ),
+                        title: const Text("Camera"),
+                        onTap: () {
+                          Get.back();
+                          pickImage(ImageSource.camera);
+                        },
                       ),
-                      title: const Text("Camera"),
-                      onTap: () {
-                        Get.back();
-                        pickImage(ImageSource.camera);
-                      },
-                    ),
-                    ListTile(
-                      leading: const Icon(
-                        Icons.photo_library,
-                        color: AppColors.primaryOrangeColor,
+                      ListTile(
+                        leading: const Icon(
+                          Icons.photo_library,
+                          color: AppColors.primaryOrangeColor,
+                        ),
+                        title: const Text("Gallery"),
+                        onTap: () {
+                          Get.back();
+                          pickImage(ImageSource.gallery);
+                        },
                       ),
-                      title: const Text("Gallery"),
-                      onTap: () {
-                        Get.back();
-                        pickImage(ImageSource.gallery);
-                      },
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
           ],
         ),
       ),
