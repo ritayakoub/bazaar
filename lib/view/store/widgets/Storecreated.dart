@@ -187,7 +187,7 @@ class Storecreated extends StatelessWidget {
                                     controller.locationController.clear();
                                     controller.hasStore.value = false;
                                     onStoreDeleted?.call();
-                                    Get.off(() =>
+                                    Get.offAll(() =>
                                         HomeScreen()); // العودة للصفحة الرئيسية
                                   },
                                   child: const Text(

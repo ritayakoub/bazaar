@@ -2,19 +2,9 @@ import '../const_data/const_data.dart';
 
 class AppLink {
   //remote address
-  static String appRoot = "https://";
+  static String appRoot = "http://192.168.1.7:8000/api";
 
-  static String imageWithRoot = "$appRoot/storagr";
-
-  static String imageWithoutRoot = "$appRoot";
-
-  static String serverApiRoot = "$appRoot/api";
-
-  static String home = "$serverApiRoot/home";
-
-  static String user = "$serverApiRoot/user";
-  static String profile = "$serverApiRoot/profile";
-  static String notification = "$serverApiRoot/notification";
+  static String signin = "$appRoot/login";
 
   Map<String, String> getHeader() {
     Map<String, String> mainHeader = {

@@ -14,10 +14,9 @@ class SplashController extends GetxController {
 
   Future<void> _checkLoginStatus() async {
     await Future.delayed(const Duration(seconds: 3));
-
     final isLoggedIn =
         myService.sharedPreferences.getBool(SharedPreferencesKey.isLogInKey) ??
-        false;
+            false;
 
     if (isLoggedIn) {
       Get.offAllNamed(Routes.homeScreen);

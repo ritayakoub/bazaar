@@ -1,6 +1,9 @@
 import 'package:bazaar2/core/const_data/app_colors.dart';
 import 'package:bazaar2/core/const_data/app_image.dart';
 import 'package:bazaar2/core/const_data/font_family.dart';
+import 'package:bazaar2/core/service/my_service.dart';
+import 'package:bazaar2/core/service/shared_preferences_key.dart';
+import 'package:bazaar2/view/login/screen/login.dart';
 import 'package:bazaar2/view/store/screen/createstore.dart';
 import 'package:bazaar2/view/Store_Order/screen/storeorderall.dart';
 import 'package:bazaar2/view/bazzardetails/screen/bazzarscren.dart';
@@ -149,7 +152,14 @@ class CustomDrawer extends StatelessWidget {
               child: SizedBox(
                 width: double.infinity,
                 child: MaterialButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    final myService = Get.find<MyService>();
+
+                    await myService.sharedPreferences
+                        .remove(SharedPreferencesKey.isLogInKey);
+
+                    Get.offAll(Login());
+                  },
                   color: AppColors.primaryOrangeColor,
                   height: MediaQueryUtil.screenHeight / 20.58,
                   elevation: 0.0,
