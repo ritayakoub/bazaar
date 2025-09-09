@@ -5,7 +5,6 @@ import 'package:bazaar2/core/const_data/text_style.dart';
 import 'package:bazaar2/core/service/media_query.dart';
 import 'package:bazaar2/core/service/routes.dart';
 import 'package:bazaar2/view/login/controller/logincontroller.dart';
-import 'package:bazaar2/widget/custombutton.dart';
 import 'package:bazaar2/widget/emailfield.dart';
 import 'package:bazaar2/widget/passwordfield.dart';
 import 'package:flutter/material.dart';
