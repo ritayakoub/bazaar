@@ -2,12 +2,15 @@ import 'package:bazaar2/core/const_data/app_colors.dart';
 import 'package:bazaar2/core/const_data/app_image.dart';
 import 'package:bazaar2/core/const_data/font_family.dart';
 import 'package:bazaar2/view/Dashboard_home/controller/dashboard_controller.dart';
+import 'package:bazaar2/view/account/controller/accountcontroller.dart';
+import 'package:bazaar2/view/account/screen/account.dart';
 import 'package:bazaar2/view/store/screen/createstore.dart';
 import 'package:bazaar2/view/Store_Order/screen/storeorderall.dart';
 import 'package:bazaar2/view/bazzardetails/screen/bazzarscren.dart';
 import 'package:bazaar2/view/home/widgets/drawerlisttile.dart';
 import 'package:bazaar2/view/product/screen/noproduct.dart';
 import 'package:bazaar2/view/requestbazzar/screen/screenrequest.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -21,6 +24,7 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AccountController accountController = Get.find<AccountController>();
     return Material(
       elevation: MediaQueryUtil.screenWidth / 41.2,
       borderRadius: const BorderRadius.only(
@@ -46,12 +50,32 @@ class CustomDrawer extends StatelessWidget {
                 right: MediaQueryUtil.screenWidth / 20.6,
               ),
               child: Row(children: [
-                ClipRRect(
-                  borderRadius:
-                      BorderRadius.circular(MediaQueryUtil.screenWidth / 51.5),
-                  child: Image.asset(
-                    AppImages.user3,
-                    width: MediaQueryUtil.screenWidth / 7.5,
+                CircleAvatar(
+                  radius: MediaQueryUtil.screenWidth / 18,
+                  backgroundColor: Colors.grey.shade200,
+                  child: ClipOval(
+                    child: accountController.profileImageUrl.isNotEmpty
+                        ? CachedNetworkImage(
+                            imageUrl: accountController.profileImageUrl.value,
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: double.infinity,
+                            placeholder: (context, url) => const Center(
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            ),
+                            errorWidget: (context, url, error) => Image.asset(
+                              AppImages.profilephoto,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: double.infinity,
+                            ),
+                          )
+                        : Image.asset(
+                            AppImages.profilephoto,
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: double.infinity,
+                          ),
                   ),
                 ),
                 SizedBox(width: MediaQueryUtil.screenWidth / 25),
@@ -60,16 +84,19 @@ class CustomDrawer extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "rita yakoub",
+                        Get.find<AccountController>().nameController.text,
                         style: TextStyle(
                             fontSize: MediaQueryUtil.screenWidth / 18.3,
                             color: AppColors.black70),
                       ),
-                      Text(
-                        "view profile",
-                        style: TextStyle(
-                            fontSize: MediaQueryUtil.screenWidth / 30.3,
-                            color: AppColors.black70),
+                      GestureDetector(
+                        onTap: () => Get.to(const Account()),
+                        child: Text(
+                          "view profile",
+                          style: TextStyle(
+                              fontSize: MediaQueryUtil.screenWidth / 30.3,
+                              color: AppColors.black70),
+                        ),
                       ),
                     ],
                   ),
