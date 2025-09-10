@@ -1,0 +1,2 @@
+D:/bazaarAdmin/bazaar/android/app/.cxx/RelWithDebInfo/5b442k6j/x86_64/CMakeFiles/edit_cache.dir
+D:/bazaarAdmin/bazaar/android/app/.cxx/RelWithDebInfo/5b442k6j/x86_64/CMakeFiles/rebuild_cache.dir

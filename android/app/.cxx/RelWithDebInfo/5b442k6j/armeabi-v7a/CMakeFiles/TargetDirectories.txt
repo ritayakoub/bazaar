@@ -1,0 +1,2 @@
+D:/bazaarAdmin/bazaar/android/app/.cxx/RelWithDebInfo/5b442k6j/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/bazaarAdmin/bazaar/android/app/.cxx/RelWithDebInfo/5b442k6j/armeabi-v7a/CMakeFiles/rebuild_cache.dir

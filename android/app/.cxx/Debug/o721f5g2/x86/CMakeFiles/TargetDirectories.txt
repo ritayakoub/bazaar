@@ -1,0 +1,2 @@
+C:/Users/sh3sh/OneDrive/Desktop/bazaarAdmin/bazaar/android/app/.cxx/Debug/o721f5g2/x86/CMakeFiles/edit_cache.dir
+C:/Users/sh3sh/OneDrive/Desktop/bazaarAdmin/bazaar/android/app/.cxx/Debug/o721f5g2/x86/CMakeFiles/rebuild_cache.dir
