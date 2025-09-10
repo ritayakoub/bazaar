@@ -1,15 +1,18 @@
 import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:bazaar2/core/const_data/app_colors.dart';
-import 'package:bazaar2/core/service/media_query.dart';
+import 'package:bazaar2/core/helper/appconfig.dart';
+import 'package:bazaar2/core/service/link.dart';
 import 'package:bazaar2/core/service/my_service.dart';
 import 'package:bazaar2/core/service/shared_preferences_key.dart';
+import 'package:bazaar2/view/account/widgets/imagebuttonfunction.dart';
+import 'package:bazaar2/view/account/widgets/showpicturesource.dart';
+import 'package:bazaar2/view/home/model/usermodel.dart';
+import 'package:bazaar2/view/model/profileusermodel.dart';
 import 'package:bazaar2/widget/customtoast.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 class AccountController extends GetxController {
@@ -21,102 +24,195 @@ class AccountController extends GetxController {
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
 
-  Rx<File?> profileImage = Rx<File?>(null);
   RxString selectedGender = ''.obs;
-  void loadUserData() {
-    final prefs = myService.sharedPreferences;
+  var user = Rx<UserProfileModel?>(null);
+  var isLoading = false.obs;
+  RxString profileImageUrl = ''.obs;
 
-    nameController.text =
-        prefs.getString(SharedPreferencesKey.userNameKey) ?? '';
-    emailController.text =
-        prefs.getString(SharedPreferencesKey.userEmailKey) ?? '';
-    phoneController.text =
-        prefs.getString(SharedPreferencesKey.userNumberKey) ?? '';
-    ageController.text = prefs.getString(SharedPreferencesKey.userAgeKey) ?? '';
-    selectedGender.value =
-        prefs.getString(SharedPreferencesKey.userGenderKey) ?? '';
-  }
+  Future<void> loadUserData() async {
+    try {
+      isLoading.value = true;
 
-  void loadProfileImage() {
-    final base64Image = myService.sharedPreferences.getString(
-      SharedPreferencesKey.userImageKey,
-    );
+      final prefs = myService.sharedPreferences;
+      final token = prefs.getString(SharedPreferencesKey.tokenKey);
 
-    if (base64Image?.isNotEmpty ?? false) {
-      try {
-        final bytes = base64Decode(base64Image!);
-        final tempDir = Directory.systemTemp;
-        final file = File('${tempDir.path}/profile_image.jpg');
-        file.writeAsBytesSync(bytes);
-        profileImage.value = file;
-      } catch (e) {
-        ToastUtil.showToast("Failed to decode profile image: $e");
+      if (token == null) {
+        Get.snackbar("Error", "No token found, please login again");
+        return;
       }
+
+      final response = await http.get(
+        Uri.parse(AppLink.me),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      final dynamic data = jsonDecode(response.body);
+
+      if (response.statusCode == 200 && data["success"] == true) {
+        user.value = UserProfileModel.fromJson(data["data"]);
+        nameController.text = user.value!.name;
+        emailController.text = user.value!.email;
+        phoneController.text = user.value!.phoneNumber;
+        if (user.value!.age != null) {
+          ageController.text = user.value!.age.toString();
+        }
+        if (user.value!.gender != null) {
+          selectedGender.value = user.value!.gender.toString();
+        }
+        if (user.value!.profileImage != null) {
+          String url = user.value!.profileImage!;
+          if (url.contains("127.0.0.1")) {
+            url =
+                url.replaceAll("http://127.0.0.1:8000", AppConfig.getBaseUrl());
+          }
+          profileImageUrl.value = url;
+        }
+      } else {
+        Get.snackbar("Error", data["message"] ?? "Failed to load profile");
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    } finally {
+      isLoading.value = false;
     }
   }
 
   Future<void> saveInfo() async {
-    final prefs = myService.sharedPreferences;
+    try {
+      isLoading.value = true;
 
-    await prefs.setString(
-      SharedPreferencesKey.userNameKey,
-      nameController.text,
-    );
-    await prefs.setString(
-      SharedPreferencesKey.userEmailKey,
-      emailController.text,
-    );
-    await prefs.setString(
-      SharedPreferencesKey.userNumberKey,
-      phoneController.text,
-    );
-    await prefs.setString(SharedPreferencesKey.userAgeKey, ageController.text);
-    await prefs.setString(
-      SharedPreferencesKey.userGenderKey,
-      selectedGender.value,
-    );
+      final prefs = myService.sharedPreferences;
+      final token = prefs.getString(SharedPreferencesKey.tokenKey);
 
-    ToastUtil.showToast('Account information updated');
-  }
-
-  Future<void> pickImage(ImageSource source) async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: source);
-
-    if (pickedFile != null) {
-      final imageFile = File(pickedFile.path);
-      final compressedBytes = await compressImage(imageFile);
-
-      if (compressedBytes != null) {
-        final base64Image = base64Encode(compressedBytes);
-        await myService.sharedPreferences.setString(
-          SharedPreferencesKey.userImageKey,
-          base64Image,
-        );
-
-        final tempDir = Directory.systemTemp;
-        final tempFile = File(
-          '${tempDir.path}/profile_image_${DateTime.now().millisecondsSinceEpoch}.jpg',
-        );
-        await tempFile.writeAsBytes(compressedBytes);
-
-        final isFirstTime = profileImage.value == null;
-        profileImage.value = tempFile;
-
-        ToastUtil.showToast(
-          isFirstTime ? 'Profile picture added!' : 'Profile picture updated!',
-        );
+      if (token == null) {
+        Get.snackbar("Error", "No token found, please login again");
+        return;
       }
+
+      final hasTextChanged = nameController.text != (user.value?.name ?? "") ||
+          emailController.text != (user.value?.email ?? "") ||
+          phoneController.text != (user.value?.phoneNumber ?? "") ||
+          ageController.text != (user.value?.age?.toString() ?? "") ||
+          selectedGender.value != (user.value?.gender?.toString() ?? "");
+
+      if (!hasTextChanged) {
+        ToastUtil.showToast("No changes to update");
+        return;
+      }
+
+      final response = await http.post(
+        Uri.parse(AppLink.me),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          '_method': 'PUT',
+          'name': nameController.text,
+          'email': emailController.text,
+          'number': phoneController.text,
+          'age': ageController.text,
+          'gender': selectedGender.value,
+        }),
+      );
+
+      final dynamic data = jsonDecode(response.body);
+
+      if (response.statusCode == 200 && data["success"] == true) {
+        user.value = UserProfileModel.fromJson(data["data"]);
+        ToastUtil.showToast('Account information updated');
+      } else {
+        Get.snackbar("Error", data["message"] ?? "Failed to update profile");
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    } finally {
+      isLoading.value = false;
     }
   }
 
-  Future<Uint8List?> compressImage(File file) async {
-    return await FlutterImageCompress.compressWithFile(
-      file.absolute.path,
-      minWidth: 300,
-      quality: 60,
-      format: CompressFormat.jpeg,
-    );
+  Future<void> uploadProfileImage(ImageSource source) async {
+    try {
+      final picker = ImagePicker();
+      final pickedFile = await picker.pickImage(source: source);
+
+      if (pickedFile == null) return;
+
+      final prefs = myService.sharedPreferences;
+      final token = prefs.getString(SharedPreferencesKey.tokenKey);
+
+      if (token == null) {
+        Get.snackbar("Error", "No token found, please login again");
+        return;
+      }
+
+      ToastUtil.showToast('Uploading profile picture...');
+
+      final request = http.MultipartRequest(
+        'POST',
+        Uri.parse(AppLink.me),
+      );
+
+      request.headers['Authorization'] = 'Bearer $token';
+      request.fields['_method'] = "PUT";
+
+      request.fields['name'] = nameController.text;
+      request.fields['email'] = emailController.text;
+      request.fields['number'] = phoneController.text;
+      request.fields['age'] = ageController.text;
+      request.fields['gender'] = selectedGender.value;
+
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'image',
+          pickedFile.path,
+          filename: 'profile_image.jpg',
+        ),
+      );
+
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      print('Image upload response: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
+      final contentType = response.headers['content-type'] ?? '';
+      if (!contentType.contains('application/json')) {
+        throw FormatException('Expected JSON but got: $contentType');
+      }
+
+      final dynamic data = jsonDecode(response.body);
+
+      if (response.statusCode == 200 && data["success"] == true) {
+        // Update user data with the new image
+        user.value = UserProfileModel.fromJson(data["data"]);
+
+        if (user.value!.profileImage != null) {
+          String url = user.value!.profileImage!;
+          if (url.contains("127.0.0.1")) {
+            url =
+                url.replaceAll("http://127.0.0.1:8000", AppConfig.getBaseUrl());
+          }
+          profileImageUrl.value = url;
+        }
+
+        ToastUtil.showToast('Profile picture updated successfully');
+      } else {
+        Get.snackbar("Error", data["message"] ?? "Failed to upload image");
+      }
+    } on FormatException catch (e) {
+      print('JSON parsing failed: $e');
+      Get.snackbar(
+          "Server Error", "Please check if the API endpoint is correct");
+    } catch (e) {
+      print('Upload error: $e');
+      Get.snackbar("Error", "Failed to upload image");
+    }
   }
 
   void selectGender(String gender) {
@@ -136,208 +232,45 @@ class AccountController extends GetxController {
       textCancel: 'Cancel',
       confirmTextColor: AppColors.white,
       onConfirm: () async {
-        final prefs = myService.sharedPreferences;
-        await prefs.remove(SharedPreferencesKey.userImageKey);
-        final tempFile = File('${Directory.systemTemp.path}/profile_image.jpg');
-        if (await tempFile.exists()) {
-          await tempFile.delete();
-        }
-        profileImage.value = null;
-        ToastUtil.showToast("Profile picture removed!");
         Get.back();
+        await deleteProfileImage();
       },
       onCancel: () {},
     );
   }
 
-  void imageButtonFunction() {
-    final hasImage = profileImage.value != null;
+  void imageButtonFunction() => showImageBottomSheet();
 
-    Get.bottomSheet(
-      Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: MediaQueryUtil.screenWidth / 41.2,
-          vertical: MediaQueryUtil.screenHeight / 42.2,
-        ),
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(MediaQueryUtil.screenWidth / 20.6),
-          ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            hasImage
-                ? Column(
-                    children: [
-                      ListTile(
-                        leading: const Icon(
-                          Icons.visibility,
-                          color: AppColors.primaryOrangeColor,
-                        ),
-                        title: const Text("See profile picture"),
-                        onTap: () {
-                          Get.back();
-                          Future.delayed(const Duration(milliseconds: 200), () {
-                            showDialog(
-                              context: Get.context!,
-                              builder: (context) {
-                                return Dialog(
-                                  backgroundColor: Colors.transparent,
-                                  child: InteractiveViewer(
-                                    child: AspectRatio(
-                                      aspectRatio: 1,
-                                      child: Image.file(
-                                        profileImage.value!,
-                                        fit: BoxFit.contain,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          });
-                        },
-                      ),
-                      ListTile(
-                        leading: const Icon(
-                          Icons.image,
-                          color: AppColors.primaryOrangeColor,
-                        ),
-                        title: const Text("Choose profile picture"),
-                        onTap: () {
-                          Get.back();
-                          Future.delayed(const Duration(milliseconds: 200), () {
-                            showPictureSourceBottomSheet();
-                          });
-                        },
-                      ),
-                      ListTile(
-                        leading: const Icon(
-                          Icons.delete,
-                          color: AppColors.primaryOrangeColor,
-                        ),
-                        title: const Text("Remove picture"),
-                        onTap: () {
-                          Get.back();
-                          Future.delayed(const Duration(milliseconds: 200), () {
-                            removeProfileImage();
-                          });
-                        },
-                      ),
-                    ],
-                  )
-                : Column(
-                    children: [
-                      Text(
-                        "Choose picture source",
-                        style: TextStyle(
-                          fontSize: MediaQueryUtil.screenWidth / 22.88,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.primaryFontColor,
-                        ),
-                      ),
-                      SizedBox(height: MediaQueryUtil.screenHeight / 84.4),
-                      ListTile(
-                        leading: const Icon(
-                          Icons.camera_alt,
-                          color: AppColors.primaryOrangeColor,
-                        ),
-                        title: const Text("Camera"),
-                        onTap: () {
-                          Get.back();
-                          pickImage(ImageSource.camera);
-                        },
-                      ),
-                      ListTile(
-                        leading: const Icon(
-                          Icons.photo_library,
-                          color: AppColors.primaryOrangeColor,
-                        ),
-                        title: const Text("Gallery"),
-                        onTap: () {
-                          Get.back();
-                          pickImage(ImageSource.gallery);
-                        },
-                      ),
-                    ],
-                  ),
-          ],
-        ),
-      ),
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(MediaQueryUtil.screenWidth / 20.6),
-        ),
-      ),
-    );
-  }
+  void showPictureSourceBottomSheet() => showHelperPictureSourceBottomSheet();
 
-  void showPictureSourceBottomSheet() {
-    Get.bottomSheet(
-      Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: MediaQueryUtil.screenWidth / 41.2,
-          vertical: MediaQueryUtil.screenHeight / 42.2,
-        ),
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(MediaQueryUtil.screenWidth / 20.6),
-          ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              "Choose picture source",
-              style: TextStyle(
-                fontSize: MediaQueryUtil.screenWidth / 22.88,
-                fontWeight: FontWeight.w600,
-                color: AppColors.primaryFontColor,
-              ),
-            ),
-            SizedBox(height: MediaQueryUtil.screenHeight / 84.4),
-            ListTile(
-              leading: const Icon(
-                Icons.camera_alt,
-                color: AppColors.primaryOrangeColor,
-              ),
-              title: const Text("Camera"),
-              onTap: () {
-                Get.back();
-                pickImage(ImageSource.camera);
-              },
-            ),
-            ListTile(
-              leading: const Icon(
-                Icons.photo_library,
-                color: AppColors.primaryOrangeColor,
-              ),
-              title: const Text("Gallery"),
-              onTap: () {
-                Get.back();
-                pickImage(ImageSource.gallery);
-              },
-            ),
-          ],
-        ),
-      ),
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(MediaQueryUtil.screenWidth / 20.6),
-        ),
-      ),
-    );
+  Future<void> deleteProfileImage() async {
+    try {
+      final prefs = myService.sharedPreferences;
+      final token = prefs.getString(SharedPreferencesKey.tokenKey);
+
+      final response = await http.delete(
+        Uri.parse(AppLink.deleteProfileImage),
+        headers: {
+          "Accept": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        profileImageUrl.value = '';
+        Get.snackbar("Success", "Profile image deleted successfully");
+      } else {
+        Get.snackbar(
+            "Error", "Failed to delete Profile image (${response.statusCode})");
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
   }
 
   @override
   void onInit() {
     loadUserData();
-    loadProfileImage();
     super.onInit();
   }
 }

@@ -17,6 +17,7 @@ class NumberField extends StatelessWidget {
         SizedBox(width: MediaQueryUtil.screenWidth / 8.4),
         Expanded(
           child: TextFormField(
+            maxLength: 10,
             keyboardType: TextInputType.phone,
             controller: controller.phoneController,
             validator: (phoneNumber) {
@@ -29,25 +30,20 @@ class NumberField extends StatelessWidget {
               return null;
             },
             style: TextStyle(
-              color: AppColors.primaryFontColor,
-              fontSize: MediaQueryUtil.screenWidth / 20.6,
-              fontWeight: FontWeight.w500,
-            ),
+                color: AppColors.primaryFontColor,
+                fontSize: MediaQueryUtil.screenWidth / 20.6,
+                fontWeight: FontWeight.w500),
             decoration: const InputDecoration(
               hintText: '09**',
               isDense: true,
               enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: AppColors.darkGrey),
-              ),
+                  borderSide: BorderSide(color: AppColors.darkGrey)),
               focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: AppColors.darkGrey),
-              ),
+                  borderSide: BorderSide(color: AppColors.darkGrey)),
               errorBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: AppColors.darkGrey),
-              ),
+                  borderSide: BorderSide(color: AppColors.darkGrey)),
               focusedErrorBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: AppColors.darkGrey),
-              ),
+                  borderSide: BorderSide(color: AppColors.darkGrey)),
             ),
           ),
         ),

@@ -1,7 +1,7 @@
-import 'package:bazaar2/view/account/controller/accountcontroller.dart';
 import 'package:bazaar2/core/const_data/app_colors.dart';
 import 'package:bazaar2/core/const_data/text_style.dart';
 import 'package:bazaar2/core/service/media_query.dart';
+import 'package:bazaar2/view/account/controller/accountcontroller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -36,24 +36,19 @@ class AgeField extends StatelessWidget {
               return null;
             },
             style: TextStyle(
-              color: AppColors.primaryFontColor,
-              fontSize: MediaQueryUtil.screenWidth / 20.6,
-              fontWeight: FontWeight.w500,
-            ),
+                color: AppColors.primaryFontColor,
+                fontSize: MediaQueryUtil.screenWidth / 20.6,
+                fontWeight: FontWeight.w500),
             decoration: const InputDecoration(
               isDense: true,
               enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: AppColors.darkGrey),
-              ),
+                  borderSide: BorderSide(color: AppColors.darkGrey)),
               focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: AppColors.darkGrey),
-              ),
+                  borderSide: BorderSide(color: AppColors.darkGrey)),
               errorBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: AppColors.darkGrey),
-              ),
+                  borderSide: BorderSide(color: AppColors.darkGrey)),
               focusedErrorBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: AppColors.darkGrey),
-              ),
+                  borderSide: BorderSide(color: AppColors.darkGrey)),
             ),
           ),
         ),
