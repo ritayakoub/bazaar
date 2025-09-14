@@ -45,58 +45,15 @@ class DashboardController extends GetxController {
   late final List<String> storeItemIds;
 
   final List<dynamic> allItems = <dynamic>[];
-  Future<void> loadInitialData() async {
+  final ProductRepository _productRepo = ProductRepository();
+
+  Future<void> loadOwnProducts() async {
     try {
-      isLoading = true;
-      update();
-      await Future.delayed(const Duration(seconds: 3));
-
-      final products = await productRepo.fetchProducts();
+      final products = await _productRepo.fetchOwnProducts();
       productCardItem.assignAll(products);
-
-      final bazaars = await bazaarRepo.fetchBazaars();
-      bazaarCardItem.assignAll(bazaars);
-
-      productItemIds = productCardItem.map((product) => product.id).toList();
-      bazaarItemIds = bazaarCardItem.map((bazaar) => bazaar.id).toList();
-      final tempItems = [
-        ...productCardItem
-            .map((product) => {'type': 'product', 'data': product}),
-      ];
-
-      tempItems.shuffle();
-      allItems.assignAll(tempItems);
     } catch (e) {
+      print(e.toString());
       ToastUtil.showToast('Failed to load data, ${e.toString()}');
-    } finally {
-      isLoading = false;
-      update();
-    }
-  }
-
-  Future<void> refreshData() async {
-    try {
-      isLoading = true;
-      update();
-      await Future.delayed(const Duration(seconds: 2));
-
-      final products = await productRepo.fetchProducts();
-      productCardItem.assignAll(products);
-
-      final tempItems = [
-        ...productCardItem
-            .map((product) => {'type': 'product', 'data': product}),
-      ];
-      final bazaars = await bazaarRepo.fetchBazaars();
-      bazaarCardItem.assignAll(bazaars);
-      tempItems.shuffle();
-      allItems.assignAll(tempItems);
-      updateSelectedIndex(0);
-    } catch (e) {
-      ToastUtil.showToast("Couldn't refresh feed");
-    } finally {
-      isLoading = false;
-      update();
     }
   }
 
@@ -122,7 +79,8 @@ class DashboardController extends GetxController {
 
   @override
   void onInit() {
-    loadInitialData();
+    // loadInitialData();
+    loadOwnProducts();
     loadOrders();
     loadrequest();
     super.onInit();

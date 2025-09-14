@@ -12,9 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Viewproductwidget extends StatelessWidget {
-  const Viewproductwidget({
-    super.key,
-  });
+  final String id;
+  const Viewproductwidget({super.key, required this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +25,9 @@ class Viewproductwidget extends StatelessWidget {
           body: SingleChildScrollView(
               child: Padding(
             padding: EdgeInsets.only(
+              right: 20,
+              left: 20,
+              top: 20,
               bottom:
                   MediaQueryUtil.screenHeight / 10, // حتى ما يغطي الزر المحتوى
             ),
@@ -184,13 +186,6 @@ class Viewproductwidget extends StatelessWidget {
                                             MediaQueryUtil.screenWidth / 17.16,
                                         color: AppColors.black60,
                                       )),
-                                  TextSpan(
-                                      text: '\$ ',
-                                      style: TextStyle(
-                                          fontSize: MediaQueryUtil.screenWidth /
-                                              25.75,
-                                          color: AppColors.black60,
-                                          fontFamily: FontFamily.russoOne)),
                                 ],
                               )),
                             )
@@ -453,6 +448,10 @@ class Viewproductwidget extends StatelessWidget {
                       const PopupMenuDivider(),
                       PopupMenuItem<String>(
                         value: 'Delete',
+                        onTap: () {
+                          controller.deleteProduct(id);
+                          Get.back();
+                        },
                         child: Text(
                           'Delete',
                           style: TextStyle(

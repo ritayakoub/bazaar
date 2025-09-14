@@ -7,7 +7,8 @@ import 'package:bazaar2/view/home/controller/home_controller.dart';
 import 'package:bazaar2/widget/defaultappbar.dart';
 
 class Viewproduct extends StatelessWidget {
-  const Viewproduct({super.key});
+  final String id;
+  const Viewproduct({super.key, required this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -19,13 +20,9 @@ class Viewproduct extends StatelessWidget {
           onMenuTap: controller.toggleDrawer,
         ),
         backgroundColor: AppColors.backgroundColor,
-        body: Padding(
-            padding: EdgeInsets.only(
-              top: MediaQueryUtil.screenHeight / 52.75,
-              left: MediaQueryUtil.screenWidth / 20.6,
-              right: MediaQueryUtil.screenWidth / 20.6,
-            ),
-            child: const Viewproductwidget()),
+        body: Viewproductwidget(
+          id: id,
+        ),
       )
     ]);
   }

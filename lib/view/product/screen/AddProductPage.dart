@@ -5,19 +5,18 @@ import 'package:bazaar2/view/product/controller/product_controller.dart';
 import 'package:bazaar2/view/product/screen/viewproduct.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../core/const_data/app_colors.dart';
 import '../../../core/const_data/font_family.dart';
 import '../../../widget/defaultappbar.dart';
 
 class AddProductPage extends StatelessWidget {
-  AddProductPage({super.key});
-
-  final _formKey = GlobalKey<FormState>();
+  const AddProductPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final ProductController controller = Get.put(ProductController());
+    final controller = Get.find<ProductController>();
     final controllerH = Get.put(HomeController());
 
     return Scaffold(
@@ -34,7 +33,7 @@ class AddProductPage extends StatelessWidget {
         ),
         child: SingleChildScrollView(
           child: Form(
-            key: _formKey,
+            key: controller.formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -56,7 +55,7 @@ class AddProductPage extends StatelessWidget {
                 Obx(() {
                   return GestureDetector(
                     onTap: () {
-                      controller.pickImage();
+                      controller.pickImage(ImageSource.gallery);
                     },
                     child: Container(
                       height: MediaQueryUtil.screenHeight / 5,
@@ -144,6 +143,9 @@ class AddProductPage extends StatelessWidget {
                 ),
                 TextFormField(
                     controller: controller.description,
+                    validator: (value) => value == null || value.isEmpty
+                        ? 'Enter description'
+                        : null,
                     decoration: InputDecoration(
                       hintText: "Super light bag",
                       hintStyle: const TextStyle(
@@ -176,6 +178,31 @@ class AddProductPage extends StatelessWidget {
                         fontFamily: FontFamily.montserrat),
                   ),
                 ),
+                TextFormField(
+                    controller: controller.category,
+                    validator: (value) => value == null || value.isEmpty
+                        ? 'Enter category'
+                        : null,
+                    decoration: InputDecoration(
+                      hintText: "Books",
+                      hintStyle: const TextStyle(
+                        color: AppColors.borderLightGrey,
+                        fontFamily: FontFamily.montserrat,
+                      ),
+                      fillColor: AppColors.white,
+                      filled: true,
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(
+                            MediaQueryUtil.screenWidth / 51.5),
+                        borderSide:
+                            const BorderSide(color: AppColors.borderLightGrey),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(
+                              MediaQueryUtil.screenWidth / 51.5),
+                          borderSide: const BorderSide(
+                              color: AppColors.borderLightGrey)),
+                    )),
                 Padding(
                   padding: EdgeInsets.only(
                       top: MediaQueryUtil.screenHeight / 42,
@@ -352,14 +379,8 @@ class AddProductPage extends StatelessWidget {
         ),
         child: MaterialButton(
           onPressed: () async {
-            if (_formKey.currentState!.validate()) {
-              final controller = Get.find<ProductController>();
-
-              // إرسال البيانات للباك اند
-              await controller.addProductToServer();
-
-              // الانتقال لصفحة عرض المنتج بعد الإرسال
-              Get.off(const Viewproduct());
+            if (controller.formKey.currentState!.validate()) {
+              controller.createProduct();
             }
           },
           color: AppColors.primaryOrangeColor,

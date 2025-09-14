@@ -95,7 +95,7 @@ class Requestproduct extends StatelessWidget {
                       mainAxisSpacing: MediaQueryUtil.screenHeight / 49.64,
                     ),
                     itemBuilder: (context, index) {
-                      return ProductCard(
+                      return CustomProductCard(
                           data: controller.productCardItem[index]);
                     },
                   ),

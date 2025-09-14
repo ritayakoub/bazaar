@@ -113,34 +113,6 @@ List<Ordersmodel> orderItems = [
       status: "Completed"),
 ];
 
-List<Product> productCardItems = [
-  Product(
-    id: "product1",
-    image: AppImages.productbag,
-    status: 'DISCOUNT',
-    price: 11,
-    name: 'Women’s Bag',
-    size: '',
-    markerName: 'Revenue',
-    category: 'Cosmetics',
-    details:
-        "Elevate your style with this iconic Louis Vuitton women's bag, a timeless piece blending sophistication and functionality. Crafted from the brand's signature Monogram Canvas or Epi leather, this bag embodies luxury and durability.",
-    comments: [],
-  ),
-  Product(
-    id: "product2",
-    image: AppImages.productPhoto,
-    status: 'DISCOUNT',
-    price: 12,
-    name: 'Women’s Shirt',
-    size: 'L',
-    markerName: 'Revenue',
-    category: 'Pejama',
-    details:
-        "Chic and versatile, this lightweight blouse features a flattering V-neckline, flowy sleeves, and a delicate floral print. Perfect for casual or polished looks!",
-    comments: [],
-  ),
-];
 final List<Bazaar> bazaarCardItems = [
   Bazaar(
       id: "bazaar2",
