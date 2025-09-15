@@ -19,7 +19,11 @@ class CustomProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => Get.to(
+<<<<<<< HEAD
           ViewProductWidget(
+=======
+          Viewproductwidget(
+>>>>>>> d1050e403535d3e2ee922c12e0ec19407175fc13
             id: data.id.toString(),
           ),
           arguments: {"id": data.id}),

@@ -2,7 +2,11 @@ import '../const_data/const_data.dart';
 
 class AppLink {
   //remote address
+<<<<<<< HEAD
   static String appRoot = "http://192.168.1.8:8000/api";
+=======
+  static String appRoot = "http://192.168.1.103:8000/api";
+>>>>>>> d1050e403535d3e2ee922c12e0ec19407175fc13
 
   static String signin = "$appRoot/login";
   static String getOwnProducts = "$appRoot/own/products";

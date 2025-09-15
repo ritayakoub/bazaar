@@ -48,6 +48,7 @@ class ProductRepository {
       Get.snackbar("Failed", "Failed to load products: ${response.statusCode}");
       throw Exception("Failed to load products: ${response.statusCode}");
     }
+<<<<<<< HEAD
   }
 
   Future<Product?> createProduct(
@@ -160,6 +161,85 @@ class ProductRepository {
     } else {
       Get.snackbar("Failed", "Failed to load product: ${response.statusCode}");
       throw Exception("Failed to load product: ${response.statusCode}");
+=======
+  }
+
+  Future<Product?> createProduct(
+    String name,
+    String description,
+    String price,
+    String cost,
+    String stockQty,
+    String showInStore,
+    String productCategory,
+    File imageFile,
+  ) async {
+    try {
+      final myService = Get.find<MyService>();
+      final prefs = myService.sharedPreferences;
+      final token = prefs.getString(SharedPreferencesKey.tokenKey);
+
+      ToastUtil.showToast('Uploading product...');
+
+      final request = http.MultipartRequest(
+        'POST',
+        Uri.parse(AppLink.createProduct),
+      );
+
+      request.headers['Authorization'] = 'Bearer $token';
+
+      request.fields['name'] = name;
+      request.fields['description'] = description;
+      request.fields['price'] = price;
+      request.fields['cost'] = cost;
+      request.fields['stock_qty'] = stockQty; // لاحظ: أضفت stock_qty
+      request.fields['show_in_store'] = showInStore;
+      request.fields['product_category'] = productCategory;
+
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'image',
+          imageFile.path,
+          filename: 'product_image.jpg',
+        ),
+      );
+
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      print('Image upload response: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
+      final contentType = response.headers['content-type'] ?? '';
+      if (!contentType.contains('application/json')) {
+        throw FormatException('Expected JSON but got: $contentType');
+      }
+
+      final dynamic data = jsonDecode(response.body);
+
+      if (response.statusCode == 200 && data["success"] == true) {
+        final createdProduct = Product.fromJson(data["data"]);
+
+        if (createdProduct.image.contains("127.0.0.1")) {
+          createdProduct.image = createdProduct.image
+              .replaceAll("http://127.0.0.1:8000", AppConfig.getBaseUrl());
+        }
+
+        return createdProduct;
+      } else {
+        Get.snackbar("Error", data["message"] ?? "Failed to upload product");
+        return null;
+      }
+    } on FormatException catch (e) {
+      print('JSON parsing failed: $e');
+      Get.snackbar(
+          "Server Error", "Please check if the API endpoint is correct");
+      return null;
+    } catch (e) {
+      print('Upload error: $e');
+      Get.snackbar("Error", "Failed to upload product");
+      return null;
+>>>>>>> d1050e403535d3e2ee922c12e0ec19407175fc13
     }
   }
 

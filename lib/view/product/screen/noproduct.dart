@@ -68,7 +68,12 @@ class NoProductPage extends StatelessWidget {
                 }
                 return RefreshIndicator(
                   onRefresh: () async {
+<<<<<<< HEAD
                     await controller.loadOwnProducts();
+=======
+                    await controller
+                        .loadOwnProducts(); // استدعاء API من الكنترولر
+>>>>>>> d1050e403535d3e2ee922c12e0ec19407175fc13
                   },
                   child: GridView.builder(
                     physics: const AlwaysScrollableScrollPhysics(), // مهم للسحب
@@ -96,7 +101,11 @@ class NoProductPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primaryOrangeColor,
         onPressed: () {
+<<<<<<< HEAD
           Get.to(() => const AddProductPage());
+=======
+          Get.to(() => AddProductPage());
+>>>>>>> d1050e403535d3e2ee922c12e0ec19407175fc13
         },
         child: const Icon(
           Icons.add,

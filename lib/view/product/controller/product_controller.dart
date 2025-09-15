@@ -29,6 +29,10 @@ class ProductController extends GetxController {
   RxList<Product> myOwnProducts = <Product>[].obs;
   var isLoading = false.obs;
 
+<<<<<<< HEAD
+=======
+  /// Pick image
+>>>>>>> d1050e403535d3e2ee922c12e0ec19407175fc13
   Future<void> pickImage(ImageSource source) async {
     try {
       final pickedFile = await _picker.pickImage(source: source);
@@ -41,6 +45,10 @@ class ProductController extends GetxController {
     }
   }
 
+<<<<<<< HEAD
+=======
+  /// Create product (calls repo)
+>>>>>>> d1050e403535d3e2ee922c12e0ec19407175fc13
   Future<void> createProduct() async {
     if (selectedImage.value == null) {
       ToastUtil.showToast("Please select an image");
@@ -97,6 +105,7 @@ class ProductController extends GetxController {
     }
   }
 
+<<<<<<< HEAD
   Future<void> updateProduct(File? imageFile, String id) async {
     try {
       final myService = Get.find<MyService>();
@@ -165,6 +174,8 @@ class ProductController extends GetxController {
     }
   }
 
+=======
+>>>>>>> d1050e403535d3e2ee922c12e0ec19407175fc13
   @override
   void onInit() {
     loadOwnProducts();

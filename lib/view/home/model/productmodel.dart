@@ -1,6 +1,69 @@
 import 'package:bazaar2/view/model/commentmodel.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 
+// class Product {
+//   final int id;
+//   String image;
+//   final String status;
+//   final int price;
+//   final String name;
+//   final String size;
+//   final String markerName;
+//   final String category;
+//   final RxList<Comment> comments;
+//   final String details;
+
+//   Product({
+//     required this.id,
+//     required this.image,
+//     required this.status,
+//     required this.price,
+//     required this.name,
+//     required this.markerName,
+//     required this.size,
+//     required this.category,
+//     required List<Comment> comments,
+//     required this.details,
+//   }) : comments = RxList<Comment>(comments);
+
+//   factory Product.fromJson(Map<String, dynamic> json) {
+//     return Product(
+//       id: json['id'],
+//       image: json['image'],
+//       status: json['status'],
+//       price: json['price'],
+//       size: json['size'],
+//       name: json['name'],
+//       markerName: json['storeName'],
+//       category: json['category'],
+//       comments: (json['comments'] as List)
+//           .map((comment) => Comment.fromJson(comment))
+//           .toList(),
+//       details: json['details'],
+//     );
+//   }
+// }
+
+// class Comment {
+//   final String profilePhoto;
+//   final String name;
+//   final double rating;
+//   final String comment;
+
+//   Comment(
+//       {required this.profilePhoto,
+//       required this.name,
+//       required this.rating,
+//       required this.comment});
+
+//   factory Comment.fromJson(Map<String, dynamic> json) {
+//     return Comment(
+//         profilePhoto: json['profilePhoto'],
+//         name: json['name'],
+//         rating: (json['rating'] as num).toDouble(),
+//         comment: json['comment']);
+//   }
+// }
 class Product {
   final int id;
   String image;
@@ -10,7 +73,10 @@ class Product {
   final String name;
   final String size;
   final String markerName;
+<<<<<<< HEAD
   final int? storeId;
+=======
+>>>>>>> d1050e403535d3e2ee922c12e0ec19407175fc13
   final int rating;
   final String category;
   final RxList<Comment> comments;
@@ -43,8 +109,12 @@ class Product {
       oldPrice: double.tryParse(json['oldPrice']?.toString() ?? '') ?? 0.0,
       size: json['size'] ?? '',
       name: json['name'] ?? '',
+<<<<<<< HEAD
       storeId: json['store_id'],
       markerName: json['markerName'] ?? 'Not in store yet',
+=======
+      markerName: json['markerName'] ?? '',
+>>>>>>> d1050e403535d3e2ee922c12e0ec19407175fc13
       category: json['category'] ?? '',
       rating: json['rating'] ?? 0,
       comments: json['comments'] != null
