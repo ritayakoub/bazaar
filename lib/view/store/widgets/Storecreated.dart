@@ -85,13 +85,6 @@ class Storecreated extends StatelessWidget {
                 color: AppColors.darkGrey),
           ),
           const SizedBox(height: 16),
-          Text(
-            "Location",
-            style: TextStyle(
-              fontFamily: FontFamily.russoOne,
-              fontSize: MediaQueryUtil.screenWidth / 18,
-            ),
-          ),
           const SizedBox(height: 16),
           Text(
             "Product Categories",
@@ -139,7 +132,7 @@ class Storecreated extends StatelessWidget {
             }),
           ),
           SizedBox(
-            height: MediaQueryUtil.screenHeight / 50,
+            height: MediaQueryUtil.screenHeight / 8,
           ),
           SizedBox(
               width: MediaQueryUtil.screenWidth / 1,
@@ -148,8 +141,7 @@ class Storecreated extends StatelessWidget {
                   showDialog(
                       context: context,
                       barrierDismissible: true,
-                      barrierColor:
-                          Colors.black.withOpacity(0.3), // تغبيش بسيط بالخلفية
+                      barrierColor: Colors.black.withOpacity(0.3),
                       builder: (BuildContext context) {
                         return BackdropFilter(
                             filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
@@ -186,7 +178,7 @@ class Storecreated extends StatelessWidget {
                                     controller.hasStore.value = false;
                                     onStoreDeleted?.call();
                                     Get.offAll(() =>
-                                        HomeScreen()); // العودة للصفحة الرئيسية
+                                        const HomeScreen()); // العودة للصفحة الرئيسية
                                   },
                                   child: const Text(
                                     "Yes",

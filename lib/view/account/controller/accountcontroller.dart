@@ -7,7 +7,6 @@ import 'package:bazaar2/core/service/my_service.dart';
 import 'package:bazaar2/core/service/shared_preferences_key.dart';
 import 'package:bazaar2/view/account/widgets/imagebuttonfunction.dart';
 import 'package:bazaar2/view/account/widgets/showpicturesource.dart';
-import 'package:bazaar2/view/home/model/usermodel.dart';
 import 'package:bazaar2/view/model/profileusermodel.dart';
 import 'package:bazaar2/widget/customtoast.dart';
 import 'package:flutter/material.dart';

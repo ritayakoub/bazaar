@@ -246,18 +246,6 @@ class StoreDetails extends StatelessWidget {
                       )
                     ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        top: MediaQueryUtil.screenHeight / 42,
-                        bottom: MediaQueryUtil.screenHeight / 100),
-                    child: Text(
-                      "Location",
-                      style: TextStyle(
-                          fontSize: MediaQueryUtil.screenWidth / 22,
-                          color: AppColors.darkGrey,
-                          fontFamily: FontFamily.montserrat),
-                    ),
-                  ),
                 ],
               ),
             ),

@@ -124,7 +124,8 @@ class DashboardScreen extends StatelessWidget {
                     mainAxisSpacing: MediaQueryUtil.screenHeight / 49.64,
                   ),
                   itemBuilder: (context, index) {
-                    return ProductCard(data: controller.productCardItem[index]);
+                    return CustomProductCard(
+                        data: controller.productCardItem[index]);
                   },
                 ),
               )),

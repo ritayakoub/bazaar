@@ -5,6 +5,7 @@ import 'package:bazaar2/core/service/media_query.dart';
 import 'package:bazaar2/view/Dashboard_home/screen/dashboard_screen.dart';
 import 'package:bazaar2/view/home/controller/home_controller.dart';
 import 'package:bazaar2/view/home/widgets/CustomDrawer.dart';
+import 'package:bazaar2/view/product/controller/product_controller.dart';
 import 'package:bazaar2/widget/defaultappbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,6 +18,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     MediaQueryUtil.init(context);
     final controller = Get.put(HomeController());
+    Get.put(ProductController());
 
     return GestureDetector(
       onHorizontalDragUpdate: (details) {
